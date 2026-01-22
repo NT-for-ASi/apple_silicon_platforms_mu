@@ -71,8 +71,6 @@ typedef struct
   UINT32 Type; // for now "1" will be AICv1, "2" will be AICv2 and "3" will be AICv3
   UINT64 ControllerBaseAddress;
   UINT32 ControllerBaseSize;
-  UINT32 NumIrqs;
-  UINT32 MaxIrqs;
 } INTERRUPT_CONTROLLER_VENDOR_DATA;
 
 typedef struct
@@ -172,8 +170,6 @@ EFI_ACPI_6_3_CSRT_TABLE Csrt =
         2, //AICv2
         0x28e100000, // AIC base address (this is hardcoded for now)
         0xC000, // AIC region size
-        4000, // PLACEHOLDER num irq value
-        4000 // PLACEHOLDER max irq value
       },
     },
     //

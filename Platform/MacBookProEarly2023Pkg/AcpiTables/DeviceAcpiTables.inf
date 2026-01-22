@@ -17,11 +17,9 @@
   VERSION_STRING                 = 1.0
 
 [Sources]
-  #Bert.asl
   DBG2.aslc
-  #EINJ.asl
-  FADT.aslc
   DSDT.asl
+  FADT.aslc
 
 [Packages]
   ArmPkg/ArmPkg.dec
