@@ -68,4 +68,5 @@ Gustave Monce (gus33000) - https://linktr.ee/gus33000 - helped answer some chall
 
 imbushuo - https://twitter.com/imbushuo - helped answer some confusing questions on EFI specific quirks.
 
+Ryan (ryansbakery.dev) - BootLogo
 ```
