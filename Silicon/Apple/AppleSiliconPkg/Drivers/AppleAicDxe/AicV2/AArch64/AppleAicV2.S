@@ -4,7 +4,7 @@
 //SPDX-License-Identifier: BSD-2-clause-patent
 
 
-#include <AsmMacroIoLibV8.h>
+#include <AArch64/AsmMacroLib.h>
 #include <Library/AppleSysRegs.h>
 
 //UINTN EFIAPI AppleAicV2ReadIpiStatusRegister(VOID);

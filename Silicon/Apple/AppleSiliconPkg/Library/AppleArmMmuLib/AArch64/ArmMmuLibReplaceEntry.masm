@@ -12,7 +12,7 @@
 //
 //------------------------------------------------------------------------------
 
-#include <AsmMacroIoLibV8.h>
+#include <AArch64/AsmMacroLib.h>
 
     AREA    |.text|,ALIGN=3,CODE,READONLY
 

@@ -23,7 +23,7 @@
 #include <Library/CacheMaintenanceLib.h>
 #include <Library/HobLib.h>
 #include <Library/SerialPortLib.h>
-#include <Chipset/AArch64.h>
+#include <AArch64.h>
 #include <Library/AppleUartSerialPortLib.h>
 #include <Library/IoLib.h>
 #include <Library/PcdLib.h>

@@ -6,7 +6,7 @@
 #
 #------------------------------------------------------------------------------
 
-#include <AsmMacroIoLibV8.h>
+#include <AArch64/AsmMacroLib.h>
 
   .set CTRL_M_BIT,      (1 << 0)
 

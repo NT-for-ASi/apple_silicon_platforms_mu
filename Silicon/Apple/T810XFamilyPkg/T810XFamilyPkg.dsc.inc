@@ -9,8 +9,8 @@
 
 [PcdsFixedAtBuild.common]
   # Setting timer frequency to 0 means "read from CNTFRQ_EL0"
-  gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|0
-  gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0x8FF000000 #fair warning this location is *totally random*
+  #gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|0
+  #gArmTokenSpaceGuid.PcdCpuVectorBaseAddress|0x8FF000000 #fair warning this location is *totally random*
   gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum|19 # placeholder 
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum|17 # phys timer IRQ number (this is arbitrary because per-cpu fiq)
   gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum|20 #this disables the HV timer

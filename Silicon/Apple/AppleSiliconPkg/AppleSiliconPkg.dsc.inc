@@ -41,7 +41,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|TRUE
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob|TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdRequireIommu|FALSE
+  # in 202405 or 202502, seems IOMMU implementation had changed
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdRequireIommu|FALSE
 
   gEfiMdePkgTokenSpaceGuid.PcdComponentNameDisable|TRUE
   gEfiMdePkgTokenSpaceGuid.PcdDriverDiagnosticsDisable|TRUE
@@ -139,7 +140,11 @@
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
-  HobLib|ArmVirtPkg/Library/ArmVirtDxeHobLib/ArmVirtDxeHobLib.inf
+  #
+  # Unsure why we're relying on the one meant for hypervisors but leaving in case we need to revert.
+  #
+  #HobLib|ArmVirtPkg/Library/ArmVirtDxeHobLib/ArmVirtDxeHobLib.inf
+  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
   DevicePathLib  |MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
   UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
@@ -181,24 +186,46 @@
   # This library provides the intrinsic functions such a compiler may generate calls to.
   #
   # NULL|ArmPkg/Library/CompilerIntrinsicsLib/CompilerIntrinsicsLib.inf   # MU_CHANGE
-  NULL|MdePkg/Library/CompilerIntrinsicsLib/ArmCompilerIntrinsicsLib.inf  # MU_CHANGE
+  #NULL|MdePkg/Library/CompilerIntrinsicsLib/ArmCompilerIntrinsicsLib.inf  # MU_CHANGE
 
   # Add support for GCC stack protector
-  NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
+  # Stack cookie support is now upstream in EDK2, so this lib got removed in 202502
+  #NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
   # ARM Architectural Libraries
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
   DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLib.inf
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
-  ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
+  #
+  # Dropped in 202502
+  #
+  #ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
 !if $(AIC_BUILD) == FALSE
-  ArmGicLib  |ArmPkg/Drivers/ArmGic/ArmGicLib.inf
-  ArmGicArchLib|AppleSiliconPkg/Library/ArmGicArchLib/ArmGicArchLib.inf
+  #
+  # Recent EDK2 releases have integrated both of these into the ArmGicDxe driver, so
+  # the definitions are no longer necessary. The AIC driver will need to go into the same direction soon.
+  #
+  # TODO: remove definitions of ArmGicLib/ArmGicArchLib, merge AppleAicLib into AppleAicDxe.
+  #
+  #ArmGicLib  |ArmPkg/Drivers/ArmGic/ArmGicLib.inf
+  #ArmGicArchLib|AppleSiliconPkg/Library/ArmGicArchLib/ArmGicArchLib.inf
 !else
   AppleAicLib  |AppleSiliconPkg/Drivers/AppleAicDxe/AppleAicLib.inf
 !endif
-  ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
-  ArmHvcLib|ArmPkg/Library/ArmHvcLib/ArmHvcLib.inf
+  #
+  # As of 202405, these libraries no longer reside in ArmPkg and have been moved to MdePkg
+  # as part of the effort to make AARCH64 a first class platform in UEFI.
+  #
+  #
+  # ArmHvcLib and ArmSmcLib are no longer used in PSCI reset system, both got consolidated into an
+  # ArmMonitorLib and the PCD gArmTokenSpaceGuid.PcdMonitorConduitHvc defines if HVC is the conduit or not
+  # (For this project, we're using virtualized/trapped SMCs, the SMC paths in ARM standard code tend to be more tested
+  # than the HVC paths)
+  #
+  ArmMonitorLib|ArmPkg/Library/ArmMonitorLib/ArmMonitorLib.inf
+  #ArmSmcLib|MdePkg/Library/ArmSmcLib/ArmSmcLib.inf
+  #ArmHvcLib|MdePkg/Library/ArmHvcLib/ArmHvcLib.inf
+
   ArmGenericTimerCounterLib|AppleSiliconPkg/Library/AppleArmGenericTimerPhyCounterLib/AppleArmGenericTimerPhyCounterLib.inf
 
   # Virtual RTC Driver
@@ -290,7 +317,8 @@
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
   MmuLib|ArmPkg/Library/MmuLib/BaseMmuLib.inf
-  ArmSvcLib|ArmPkg/Library/ArmSvcLib/ArmSvcLib.inf
+  # this got moved to MdePkg
+  ArmSvcLib|MdePkg/Library/ArmSvcLib/ArmSvcLib.inf
 
   ArmPlatformLib|ArmPlatformPkg/Library/ArmPlatformLibNull/ArmPlatformLibNull.inf
 
@@ -321,7 +349,9 @@
   MemoryTypeInfoSecVarCheckLib|MdeModulePkg/Library/MemoryTypeInfoSecVarCheckLib/MemoryTypeInfoSecVarCheckLib.inf
   SecurityLockAuditLib|MdeModulePkg/Library/SecurityLockAuditDebugMessageLib/SecurityLockAuditDebugMessageLib.inf
   ResetUtilityLib|MdeModulePkg/Library/ResetUtilityLib/ResetUtilityLib.inf
-  HwResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
+  #
+  # ArmSmcPsciResetSystemLib is refactored into a single PSCI reset system lib as of 202502
+  HwResetSystemLib|ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.inf
   ResetSystemLib|MdeModulePkg/Library/DxeResetSystemLib/DxeResetSystemLib.inf
   FltUsedLib|MdePkg/Library/FltUsedLib/FltUsedLib.inf
 
@@ -351,9 +381,10 @@
   JsonLiteParserLib |MsCorePkg/Library/JsonLiteParser/JsonLiteParser.inf
 
   # TPM Libraries
+  # either in 202405 or 202502, Tpm2DebugLib got dropped.
 
   OemTpm2InitLib          |SecurityPkg/Library/OemTpm2InitLibNull/OemTpm2InitLib.inf
-  Tpm2DebugLib            |SecurityPkg/Library/Tpm2DebugLib/Tpm2DebugLibNull.inf
+  #Tpm2DebugLib            |SecurityPkg/Library/Tpm2DebugLib/Tpm2DebugLibNull.inf
   Tpm12CommandLib         |SecurityPkg/Library/Tpm12CommandLib/Tpm12CommandLib.inf
   Tpm2CommandLib          |SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
   Tpm2DeviceLib           |SecurityPkg/Library/Tpm2DeviceLibTcg2/Tpm2DeviceLibTcg2.inf
@@ -363,17 +394,20 @@
 !if $(TPM_ENABLE) == TRUE
   Tcg2PhysicalPresenceLib |AppleSiliconPkg/Library/Tcg2PhysicalPresenceLibQemu/DxeTcg2PhysicalPresenceLib.inf
   TpmMeasurementLib       |SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
-  Tpm2DebugLib            |SecurityPkg/Library/Tpm2DebugLib/Tpm2DebugLibSimple.inf
+  #Tpm2DebugLib            |SecurityPkg/Library/Tpm2DebugLib/Tpm2DebugLibSimple.inf
 !endif
 
   AdvancedLoggerAccessLib |AdvLoggerPkg/Library/AdvancedLoggerAccessLib/AdvancedLoggerAccessLib.inf
 
-  ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
+  #
+  # In 202502, ArmPlatformStackLib got dropped.
+  #
+  #ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
   PrePiHobListPointerLib|ArmPlatformPkg/Library/PrePiHobListPointerLib/PrePiHobListPointerLib.inf
 
   SynchronizationLib|MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf
   BaseSynchronizationLib|MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf
-  CompilerIntrinsicsLib|MdePkg/Library/CompilerIntrinsicsLib/ArmCompilerIntrinsicsLib.inf  # MU_CHANGE
+  CompilerIntrinsicsLib|MdePkg/Library/CompilerIntrinsicsLib/CompilerIntrinsicsLib.inf  # MU_CHANGE
   UefiDevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 
@@ -383,6 +417,13 @@
   PcdDatabaseLoaderLib|MdeModulePkg/Library/PcdDatabaseLoaderLib/Dxe/PcdDatabaseLoaderLibDxe.inf
 
   DfciSettingsLib|DfciPkg/Library/DfciSettingsLib/DfciSettingsLib.inf
+
+  #
+  # PCI host bridge driver requires the IoMmuLib.
+  # We're specifying the NULL one for now, but note that we will need to change this 
+  # when DART support is added
+  #
+  IoMmuLib|MdeModulePkg/Library/IoMmuLibNull/IoMmuLibNull.inf
 
   DpcLib|NetworkPkg/Library/DxeDpcLib/DxeDpcLib.inf
   HttpLib|NetworkPkg/Library/DxeHttpLib/DxeHttpLib.inf
@@ -445,15 +486,22 @@
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  ArmHvcLib|ArmPkg/Library/ArmHvcLib/ArmHvcLib.inf
-  ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
+  #ArmHvcLib|MdePkg/Library/ArmHvcLib/ArmHvcLib.inf
+  #ArmSmcLib|MdePkg/Library/ArmSmcLib/ArmSmcLib.inf
+  #
+  # ArmHvcLib and ArmSmcLib are no longer used in PSCI reset system, both got consolidated into an
+  # ArmMonitorLib and the PCD gArmTokenSpaceGuid.PcdMonitorConduitHvc defines if HVC is the conduit or not
+  # (For this project, we're using virtualized/trapped SMCs, the SMC paths in ARM standard code tend to be more tested
+  # than the HVC paths)
+  #
+  ArmMonitorLib|ArmPkg/Library/ArmMonitorLib/ArmMonitorLib.inf
 !if $(TARGET) != RELEASE
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
 !endif
   ExtractGuidedSectionLib|MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf
 
   # System Reset
-  HwResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
+  HwResetSystemLib|ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.inf
   ResetSystemLib|MdeModulePkg/Library/RuntimeResetSystemLib/RuntimeResetSystemLib.inf
 
   VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
@@ -538,7 +586,7 @@
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
 !if $(AIC_BUILD) == FALSE
-  ArmPkg/Drivers/ArmGic/ArmGicDxe.inf {
+  ArmPkg/Drivers/ArmGicDxe/ArmGicDxe.inf {
     <LibraryClasses>
 	  ArmGicArchLib|AppleSiliconPkg/Library/ArmGicArchLib/ArmGicArchLib.inf
   }

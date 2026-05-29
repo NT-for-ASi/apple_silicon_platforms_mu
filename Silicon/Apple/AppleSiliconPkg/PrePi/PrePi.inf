@@ -67,7 +67,7 @@
 
 [FixedPcd]
   #CPU exception vectors
-  gArmTokenSpaceGuid.PcdCpuVectorBaseAddress
+  #gArmTokenSpaceGuid.PcdCpuVectorBaseAddress
 
   #FV settings
   gArmTokenSpaceGuid.PcdFvSize

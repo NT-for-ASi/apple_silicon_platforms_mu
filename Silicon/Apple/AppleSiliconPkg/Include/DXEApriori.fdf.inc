@@ -3,7 +3,7 @@ APRIORI DXE {
   INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
   INF ArmPkg/Drivers/CpuDxe/CpuDxe.inf
 !if $(AIC_BUILD) == FALSE
-  INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+  INF ArmPkg/Drivers/ArmGicDxe/ArmGicDxe.inf
 !else 
   INF AppleSiliconPkg/Drivers/AppleAicDxe/AppleAicDxe.inf
 !endif

@@ -134,7 +134,7 @@ FvNameGuid         = 02e6c12f-69f7-4626-b5de-e3cfd6c0dc56
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
 !if $(AIC_BUILD) == FALSE
-  INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+  INF ArmPkg/Drivers/ArmGicDxe/ArmGicDxe.inf
 !else 
   INF AppleSiliconPkg/Drivers/AppleAicDxe/AppleAicDxe.inf
 !endif

@@ -1,6 +1,6 @@
 #include <Library/PcdLib.h>
-#include <AsmMacroIoLibV8.h>
-#include <Chipset/AArch64.h>
+#include <AArch64/AsmMacroLib.h>
+#include <AArch64.h>
 #include <Library/ArmLib.h>
 
 .text
