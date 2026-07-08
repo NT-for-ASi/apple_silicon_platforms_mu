@@ -27,6 +27,7 @@ BuildConfig.conf
 /macbookairmid2022/
 /macbookprolate2021/
 /macminimid2020/
+/MacMini2020/
 
 Platform/MacStudio2022Pkg/DeviceTree/t6002-j375d.dtb
 Silicon/Apple/AppleSiliconPkg/RAMDisk/BOOTAA64.EFI
