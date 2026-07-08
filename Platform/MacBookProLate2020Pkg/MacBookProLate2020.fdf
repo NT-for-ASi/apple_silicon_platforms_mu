@@ -112,54 +112,7 @@ FvNameGuid         = 84c90f2e-22a5-4c84-a199-a17f7ea7cf6d
   INF RuleOverride=ACPITABLE MacBookProLate2020Pkg/AcpiTables/DeviceAcpiTables.inf
   INF RuleOverride=ACPITABLE MacBookProTouchBarFamilyPkg/AcpiTables/DeviceFamilyAcpiTables.inf
   INF RuleOverride=ACPITABLE T810XFamilyPkg/AcpiTables/CPUAcpiTables.inf
-  #
-  # SMBIOS Support
-  #
-  INF AppleSiliconPkg/Drivers/SmbiosInfoDxe/SmbiosInfoDxe.inf
-  INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
-  #
-  # UEFI applications
-  #
-  INF ShellPkg/Application/Shell/Shell.inf
-!ifdef $(INCLUDE_TFTP_COMMAND)
-  INF ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
-!endif #$(INCLUDE_TFTP_COMMAND)
-
-  #
-  # Bds
-  #
-  INF AppleSiliconPkg/Drivers/ColorbarsDxe/ColorbarsDxe.inf
-  INF MdeModulePkg/Universal/PrintDxe/PrintDxe.inf
-  INF MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
-  INF MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
-  INF MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
-  INF MdeModulePkg/Universal/DriverHealthManagerDxe/DriverHealthManagerDxe.inf
-  INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
-
-  # DT
-  #INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
-
-  FILE FREEFORM = PCD(gMsCorePkgTokenSpaceGuid.PcdRegulatoryGraphicFileGuid) {
-    SECTION RAW = MacBookAirMid2020Pkg/Resources/RegulatoryLogos.png
-  }
-
-  # Embedded RAMDisk (ISO format)
-  #FILE FREEFORM = 650B7CD0-94F8-46CC-88DE-8C199D41EDA3 {
-  #SECTION RAW = AppleSiliconPkg/RAMDisk/WinPE.iso
-  #SECTION UI = "Embedded RAMDisk"  
-#}
-
-  # Embedded RAMDisk (IMG format)
-  #FILE FREEFORM = 650B7CD0-94F8-46CC-88DE-8C199D41EDA3 {
-  #SECTION RAW = AppleSiliconPkg/RAMDisk/WinPE.img
-  #SECTION UI = "Embedded RAMDisk"  
-#}
-  
-  # Embedded USB firmware blob (for testing only!)
-  #FILE FREEFORM = d730ab59-670e-4a92-8475-b31939d05bb4 {
-  #SECTION RAW = AppleSiliconPkg/FirmwareBlobs/ASM2214A_PCI_XHCI_Controller.bin
-#}
   
 !include AppleSiliconPkg/FrontpageFdf.inc
 
