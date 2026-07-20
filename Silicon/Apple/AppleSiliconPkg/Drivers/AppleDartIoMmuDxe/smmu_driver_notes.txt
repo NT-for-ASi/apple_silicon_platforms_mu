@@ -1,0 +1,10 @@
+SmmuDxe.c
+- seems to be the top-level DXE driver file
+- handles page table mappings
+- handles ACPI IORT table generation
+- installs the IOMMU protocol and sets up the actual SMMU hardware.
+
+SmmuV3.h
+- page table macros
+- hardware support definitions
+- 
